@@ -10,10 +10,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks:{
     async signIn({
       user:{name, email, image},
-      profile:{id, login, bio},
+      profile:{id ,login, bio},
     }){
+      console.log(name, email, image, id, login, bio, "name, email, image, id, login, bioname, email, image, id, login, bio")
       const existingUser = await client.withConfig({useCdn:false}).fetch(AUTHOR_BY_GITHUB_ID_QUERY, {id})
-
+      console.log(existingUser, 'existingUserexistingUserexistingUserexistingUser')
       if(!existingUser){
         await writeClient.create({
           _type: "author",
@@ -28,12 +29,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return true;
     },
     async jwt({ token, account, profile }) {
+      console.log(account, profile,'account,profile')
       if (account && profile) {
         const user = await client
           .withConfig({ useCdn: false })
           .fetch(AUTHOR_BY_GITHUB_ID_QUERY, {
             id: profile?.id,
           });
+        console.log(user, 'useruseruser')
 
         token.id = user?._id;
       }
